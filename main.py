@@ -1,32 +1,25 @@
 from flask import Flask, request, jsonify
-import psycopg2
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from src import controller
 
 app = Flask(__name__)
-
-# Retrieve database connection parameters from environment variables
-db_name = os.getenv("DB_NAME")
-db_user = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASSWORD")
-db_host = os.getenv("DB_HOST")
-db_port = os.getenv("DB_PORT")
-
-def get_db_connection():
-    conn = psycopg2.connect(
-        database=db_name,
-        user=db_user,
-        password=db_password,
-        host=db_host,
-        port=db_port
-    )
-    return conn
 
 @app.route("/api/")
 def home():
     return "Home"
+
+@app.route("/api/add_user", methods=["POST"])
+def add_user_endpoint():
+
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    team_id = data.get("team_id")
+
+    if not all([email, password, team_id]):
+        return jsonify({"error": "Missing data"}), 400
+
+    controller.add_user(email, password, team_id)
+    return jsonify({"message": "User added successfully"}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)

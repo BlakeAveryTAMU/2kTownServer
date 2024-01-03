@@ -1,0 +1,1 @@
+add_user = "INSERT INTO Users (email, password, team_id) VALUES (%s, %s, %s)"
