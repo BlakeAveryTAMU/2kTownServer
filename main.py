@@ -21,5 +21,10 @@ def add_user_endpoint():
     controller.add_user(email, password, team_id)
     return jsonify({"message": "User added successfully"}), 201
 
+
+@app.route("/api/login_user", methods=["GET"])
+def login_user_endpoint():
+    return None
+
 if __name__ == "__main__":
     app.run(debug=True)
